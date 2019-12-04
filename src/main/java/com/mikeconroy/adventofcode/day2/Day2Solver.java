@@ -1,10 +1,10 @@
 package com.mikeconroy.adventofcode.day2;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.mikeconroy.adventofcode.Solver;
 
@@ -12,7 +12,7 @@ public class Day2Solver implements Solver {
 
     private String fileLocation = "inputs/day2";
 
-    List<Integer> initialProgram = new ArrayList<>();
+    List<Integer> initialProgram;
 
     @Override
     public int solve(int part) {
@@ -58,23 +58,23 @@ public class Day2Solver implements Solver {
     }
 
     private void loadInputIntoArray(){
-        BufferedReader bufferedReader;
-        try{
-            File inputFile = new File(getClass().getClassLoader().getResource(fileLocation).getFile());
+        initialProgram = new ArrayList<Integer>();
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        InputStream stream = classLoader.getResourceAsStream(fileLocation);
+        Scanner scanner = new Scanner(stream);
 
-            bufferedReader = new BufferedReader(new FileReader(inputFile)); 
-        
-            String fileContents; 
-            while ((fileContents = bufferedReader.readLine()) != null) {
-                String[] values = fileContents.split(",");
-                for (String value : values) {
-                    initialProgram.add(Integer.parseInt(value));
-                }
-            }
-            bufferedReader.close();
-        } catch (Exception e){
+        while (scanner.hasNext()) {
+            String[] values = scanner.nextLine().split(",");
+            for (String value : values) {
+                initialProgram.add(Integer.parseInt(value));
+            }   
+        }
+
+        try {
+            stream.close();
+            scanner.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
 }
