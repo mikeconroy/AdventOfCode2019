@@ -16,7 +16,7 @@ public class App
         System.out.println("Day 2B: " + solver.solve(2));
         solver = new Day3Solver();
         //Day 3 takes some time solve.
-        //System.out.println("Day 3: " + solver.solve(1));
+        // System.out.println("Day 3: " + solver.solve(1));
         System.out.println("Day 3B: " + solver.solve(2));
     }
 }

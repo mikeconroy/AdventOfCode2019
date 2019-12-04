@@ -27,24 +27,40 @@ public class Day3Solver implements Solver {
     }
 
     private int calculateResultForPart1(){
-        List<Point> wire1Coordinates = new ArrayList<Point>();
-        List<Point> wire2Coordinates = new ArrayList<Point>();
+        List<PointWithSteps> wire1Coordinates = new ArrayList<>();
+        List<PointWithSteps> wire2Coordinates = new ArrayList<>();
 
         addAllCoordinatesFromInstructions(wire1Coordinates, wire1Instructions);
         addAllCoordinatesFromInstructions(wire2Coordinates, wire2Instructions);
 
-        List<Point> matchingCoords = getMatchingCoordinates(wire1Coordinates, wire2Coordinates);
-
+        List<PointWithSteps> matchingCoords = getMatchingCoordinates(wire1Coordinates, wire2Coordinates);
         int distance = getShortestManhattanDistance(matchingCoords);
 
         return distance;
     }
 
-    private int getShortestManhattanDistance(List<Point> coords){
+    private int calculateResultForPart2(){
+        List<PointWithSteps> wire1Coordinates = new ArrayList<>();
+        List<PointWithSteps> wire2Coordinates = new ArrayList<>();
+
+        addAllCoordinatesFromInstructions(wire1Coordinates, wire1Instructions);
+        addAllCoordinatesFromInstructions(wire2Coordinates, wire2Instructions);
+
+        List<PointWithSteps> matchingCoords = getMatchingCoordinates(wire1Coordinates, wire2Coordinates);
+        int leastSteps = Integer.MAX_VALUE;
+        for(PointWithSteps intersection : matchingCoords){
+            if(intersection.steps < leastSteps){
+                leastSteps = intersection.steps;
+            }
+        }
+        return leastSteps;
+    }
+
+    private int getShortestManhattanDistance(List<PointWithSteps> coords){
         int shortestDistance = Integer.MAX_VALUE;
-        for(Point coord : coords){
-            if(getManhattanDistance(coord) < shortestDistance){
-                shortestDistance = getManhattanDistance(coord);
+        for(PointWithSteps coord : coords){
+            if(getManhattanDistance(coord.location) < shortestDistance){
+                shortestDistance = getManhattanDistance(coord.location);
             }
         }
         return shortestDistance;
@@ -54,29 +70,34 @@ public class Day3Solver implements Solver {
         return Math.abs(coordinate.x) + Math.abs(coordinate.y);
     }
 
-    private List<Point> getMatchingCoordinates(List<Point> coordinatesOne, List<Point> coordinatesTwo){
-        List<Point> matchingCoordinates = new ArrayList<>();
-        for(Point coordinateOne : coordinatesOne){
-            for(Point coordinateTwo : coordinatesTwo){
-                if(coordinateOne.equals(coordinateTwo)){
-                    matchingCoordinates.add(coordinateOne);
+    private List<PointWithSteps> getMatchingCoordinates(List<PointWithSteps> coordinatesOne, List<PointWithSteps> coordinatesTwo){
+        List<PointWithSteps> matchingCoordinates = new ArrayList<>();
+        for(PointWithSteps coordinateOne : coordinatesOne){
+            for(PointWithSteps coordinateTwo : coordinatesTwo){
+                if(coordinateOne.location.equals(coordinateTwo.location)){
+                    int totalStepsForCoord = coordinateOne.steps + coordinateTwo.steps;
+                    PointWithSteps matchingPoint = new PointWithSteps(coordinateOne.location, totalStepsForCoord);
+                    matchingCoordinates.add(matchingPoint);
+                    break;
                 }
             }
         }
         return matchingCoordinates;
     }
 
-    private void addAllCoordinatesFromInstructions(List<Point> listOfCoordinates, List<String> instructions){
+    private void addAllCoordinatesFromInstructions(List<PointWithSteps> listOfCoordinates, List<String> instructions){
         Point currentPosition = new Point(0,0);
+        int currentDistance = 0;
         for(int i = 0; i < instructions.size(); i++){
-            currentPosition = applyInstruction(listOfCoordinates, currentPosition, instructions.get(i));
+            currentPosition = applyInstruction(listOfCoordinates, currentPosition, currentDistance, instructions.get(i));
+            currentDistance = listOfCoordinates.get(listOfCoordinates.size() - 1).steps;
         }
     }
 
-    private Point applyInstruction(List<Point> listOfCoords, Point currentPosition, String instruction){
+    private Point applyInstruction(List<PointWithSteps> listOfCoords, Point currentPosition, int currentDistance, String instruction){
         char direction = instruction.charAt(0);
         Point newPosition = new Point(currentPosition.x, currentPosition.y);
-
+        int newDistance = currentDistance;
         int distance = Integer.parseInt(instruction.substring(1));
 
         for (int i = 0; i < distance; i++){
@@ -94,14 +115,11 @@ public class Day3Solver implements Solver {
                     newPosition.y = newPosition.y - 1;
                     break;
             }
-            listOfCoords.add(new Point(newPosition));
+            newDistance = newDistance + 1;
+            listOfCoords.add(new PointWithSteps(newPosition.getLocation(), newDistance));
         }
 
         return newPosition;
-    }
-
-    private int calculateResultForPart2(){
-        return 0;
     }
 
     private void loadInput(){

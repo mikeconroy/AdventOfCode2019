@@ -4,3 +4,4 @@ target/
 .classpath
 .project
 *.jar
+src/main/resources/inputs/day3.bak
