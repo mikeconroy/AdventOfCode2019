@@ -21,9 +21,8 @@ public class Day2Solver implements Solver {
             return calculateResultForPart1();
         } else if (part == 2){
             return calculateResultForPart2();
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     private int calculateResultForPart1(){
@@ -67,7 +66,7 @@ public class Day2Solver implements Solver {
             String[] values = scanner.nextLine().split(",");
             for (String value : values) {
                 initialProgram.add(Integer.parseInt(value));
-            }   
+            }
         }
 
         try {

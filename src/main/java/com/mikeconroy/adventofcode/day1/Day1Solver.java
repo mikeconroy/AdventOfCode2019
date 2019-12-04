@@ -20,9 +20,8 @@ public class Day1Solver implements Solver {
             return calculateResultForPart1();
         } else if (part == 2) {
             return calculateResultForPart2();
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     private int calculateResultForPart1() {
