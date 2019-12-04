@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -71,18 +72,47 @@ public class Day3Solver implements Solver {
     }
 
     private List<PointWithSteps> getMatchingCoordinates(List<PointWithSteps> coordinatesOne, List<PointWithSteps> coordinatesTwo){
-        List<PointWithSteps> matchingCoordinates = new ArrayList<>();
-        for(PointWithSteps coordinateOne : coordinatesOne){
-            for(PointWithSteps coordinateTwo : coordinatesTwo){
-                if(coordinateOne.location.equals(coordinateTwo.location)){
-                    int totalStepsForCoord = coordinateOne.steps + coordinateTwo.steps;
-                    PointWithSteps matchingPoint = new PointWithSteps(coordinateOne.location, totalStepsForCoord);
-                    matchingCoordinates.add(matchingPoint);
+
+        //Convert the Lists to Sets to make it quicker to search for matches.
+        //With 2 Lists - 2 nested loops are required. This is very slow over a large number of coordinates.
+
+        HashSet<Point> coordinateSetOne = new HashSet<>();
+        for (PointWithSteps coord : coordinatesOne){
+            coordinateSetOne.add(coord.location);
+        }
+
+        HashSet<Point> coordinateSetTwo = new HashSet<>();
+        for (PointWithSteps coord : coordinatesTwo){
+            coordinateSetTwo.add(coord.location);
+        }
+
+        List<Point> matchingCoords = new ArrayList<>();
+        for(Point wire1Coord : coordinateSetOne){
+            if(coordinateSetTwo.contains(wire1Coord)){
+                matchingCoords.add(wire1Coord);
+            }
+        }
+
+        List<PointWithSteps> matchingCoordinatesWithStepsList = new ArrayList<>();
+        for (Point intersection : matchingCoords){
+            int totalSteps = 0;
+            for(int coordinate1Location = 0; coordinate1Location < coordinatesOne.size(); coordinate1Location++){
+                if(coordinatesOne.get(coordinate1Location).location.equals(intersection)){
+                    totalSteps += coordinatesOne.get(coordinate1Location).steps;
                     break;
                 }
             }
+
+            for(int coordinate2Location = 0; coordinate2Location < coordinatesTwo.size(); coordinate2Location++){
+                if(coordinatesTwo.get(coordinate2Location).location.equals(intersection)){
+                    totalSteps += coordinatesTwo.get(coordinate2Location).steps;
+                }
+            }
+            matchingCoordinatesWithStepsList.add(new PointWithSteps(intersection, totalSteps));
+
         }
-        return matchingCoordinates;
+
+        return matchingCoordinatesWithStepsList;
     }
 
     private void addAllCoordinatesFromInstructions(List<PointWithSteps> listOfCoordinates, List<String> instructions){
