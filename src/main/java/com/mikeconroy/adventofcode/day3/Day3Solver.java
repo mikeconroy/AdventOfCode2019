@@ -49,6 +49,7 @@ public class Day3Solver implements Solver {
 
         List<PointWithSteps> matchingCoords = getMatchingCoordinates(wire1Coordinates, wire2Coordinates);
         int leastSteps = Integer.MAX_VALUE;
+
         for(PointWithSteps intersection : matchingCoords){
             if(intersection.steps < leastSteps){
                 leastSteps = intersection.steps;
@@ -98,14 +99,14 @@ public class Day3Solver implements Solver {
             int totalSteps = 0;
             for(int coordinate1Location = 0; coordinate1Location < coordinatesOne.size(); coordinate1Location++){
                 if(coordinatesOne.get(coordinate1Location).location.equals(intersection)){
-                    totalSteps += coordinatesOne.get(coordinate1Location).steps;
+                    totalSteps += coordinate1Location + 1;
                     break;
                 }
             }
 
             for(int coordinate2Location = 0; coordinate2Location < coordinatesTwo.size(); coordinate2Location++){
                 if(coordinatesTwo.get(coordinate2Location).location.equals(intersection)){
-                    totalSteps += coordinatesTwo.get(coordinate2Location).steps;
+                    totalSteps += coordinate2Location + 1;
                 }
             }
             matchingCoordinatesWithStepsList.add(new PointWithSteps(intersection, totalSteps));
@@ -120,7 +121,7 @@ public class Day3Solver implements Solver {
         int currentDistance = 0;
         for(int i = 0; i < instructions.size(); i++){
             currentPosition = applyInstruction(listOfCoordinates, currentPosition, currentDistance, instructions.get(i));
-            currentDistance = listOfCoordinates.get(listOfCoordinates.size() - 1).steps;
+            currentDistance = listOfCoordinates.size();
         }
     }
 
