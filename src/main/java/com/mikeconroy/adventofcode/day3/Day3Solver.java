@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
+import com.mikeconroy.adventofcode.InputReader;
 import com.mikeconroy.adventofcode.Solver;
 
 public class Day3Solver implements Solver {
@@ -157,25 +158,18 @@ public class Day3Solver implements Solver {
         wire1Instructions = new ArrayList<String>();
         wire2Instructions = new ArrayList<String>();
 
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        InputStream stream = classLoader.getResourceAsStream(fileLocation);
-        Scanner scanner = new Scanner(stream);
 
-        String[] instructions = scanner.nextLine().split(",");
-        for(String instruction : instructions){
+        String[] lines = InputReader.readFileLines(fileLocation);
+
+        String[] instructionSet1 = lines[0].split(",");
+        String[] instructionSet2 = lines[1].split(",");
+
+        for (String instruction : instructionSet1){
             wire1Instructions.add(instruction);
         }
 
-        instructions = scanner.nextLine().split(",");
-        for (String instruction : instructions) {
+        for (String instruction : instructionSet2){
             wire2Instructions.add(instruction);
-        }
-
-        try {
-            stream.close();
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

@@ -1,11 +1,9 @@
 package com.mikeconroy.adventofcode.day1;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import com.mikeconroy.adventofcode.InputReader;
 import com.mikeconroy.adventofcode.Solver;
 
 public class Day1Solver implements Solver {
@@ -51,20 +49,9 @@ public class Day1Solver implements Solver {
 
     private void loadInput() {
         inputNumbers = new ArrayList<Integer>();
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        InputStream stream = classLoader.getResourceAsStream(fileLocation);
-        Scanner scanner = new Scanner(stream);
-
-        // System.out.println("" + scanner.next());
-        while (scanner.hasNext()) {
-            inputNumbers.add(Integer.parseInt(scanner.nextLine()));
-        }
-
-        try {
-            stream.close();
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String[] lines = InputReader.readFileLines(fileLocation);
+        for(String line : lines){
+            inputNumbers.add(Integer.parseInt(line));
         }
     }
 }

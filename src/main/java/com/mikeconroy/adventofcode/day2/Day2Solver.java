@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.mikeconroy.adventofcode.InputReader;
 import com.mikeconroy.adventofcode.Solver;
 
 public class Day2Solver implements Solver {
@@ -16,7 +17,7 @@ public class Day2Solver implements Solver {
 
     @Override
     public int solve(int part) {
-        loadInputIntoArray();
+        loadInput();
         if(part == 1){
             return calculateResultForPart1();
         } else if (part == 2){
@@ -56,24 +57,16 @@ public class Day2Solver implements Solver {
         return 0;
     }
 
-    private void loadInputIntoArray(){
+    private void loadInput(){
         initialProgram = new ArrayList<Integer>();
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        InputStream stream = classLoader.getResourceAsStream(fileLocation);
-        Scanner scanner = new Scanner(stream);
 
-        while (scanner.hasNext()) {
-            String[] values = scanner.nextLine().split(",");
-            for (String value : values) {
+        String[] lines = InputReader.readFileLines(fileLocation);
+
+        for(String line : lines){
+            String[] values = line.split(",");
+            for(String value : values){
                 initialProgram.add(Integer.parseInt(value));
             }
-        }
-
-        try {
-            stream.close();
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
