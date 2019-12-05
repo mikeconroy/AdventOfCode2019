@@ -1,10 +1,7 @@
 package com.mikeconroy.adventofcode.day2;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.mikeconroy.adventofcode.InputReader;
 import com.mikeconroy.adventofcode.Solver;
