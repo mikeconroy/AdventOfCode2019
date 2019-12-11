@@ -24,5 +24,6 @@ public class App
         System.out.println("Day 4B: " + solver.solve(2));
         solver = new Day5Solver();
         System.out.println("Day 5: " + solver.solve(1));
+        System.out.println("Day 5B: " + solver.solve(2));
     }
 }

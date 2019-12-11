@@ -33,7 +33,12 @@ public class Day5Solver implements Solver {
     }
     
     private int calculateResultForPart2(){
-        return 0;
+        IntCodeComputer computer = new IntCodeComputer();
+        computer.loadProgram(initialProgram);
+        computer.run(5);
+        int result = computer.getOutput();
+        computer.resetComputer();
+        return result;
     }
 
     private void loadInput(){

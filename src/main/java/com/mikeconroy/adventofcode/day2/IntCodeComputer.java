@@ -18,7 +18,6 @@ public class IntCodeComputer {
         do {
             int increaseBy = 4;
             int result = 0;
-
             if(opcode == 1){
                 //ADDITION
                 int value1 = 0;
@@ -73,10 +72,75 @@ public class IntCodeComputer {
                 //Output value of only 1 parameter.
                 increaseBy = 2;
 
-                if(getParameterMode(currentValue, 0) == ParameterModes.POSITION_MODE){                    
+                if(getParameterMode(currentValue, 1) == ParameterModes.POSITION_MODE){  
                     output = program.get(program.get(programCounter + 1));
                 } else {
                     output = program.get(programCounter + 1);
+                }
+            } else if(opcode == 5){
+                //Jump if true
+                int value1 = 0;
+                if(getParameterMode(currentValue, 1) == ParameterModes.POSITION_MODE){
+                    value1 = program.get(program.get(programCounter + 1));
+                } else {
+                    value1 = program.get(programCounter + 1);
+                }
+
+                if(value1 != 0){
+                    int value2 = 0;
+                    if(getParameterMode(currentValue, 0) == ParameterModes.POSITION_MODE){
+                        value2 = program.get(program.get(programCounter + 2));
+                    } else {
+                        value2 = program.get(programCounter + 2);
+                    }
+                    programCounter = value2;
+                    increaseBy = 0;
+                } else {
+                    increaseBy = 3;
+                }
+            } else if (opcode == 6){
+                //Jump if false
+                int value1 = 0;
+                if(getParameterMode(currentValue, 1) == ParameterModes.POSITION_MODE){
+                    value1 = program.get(program.get(programCounter + 1));
+                } else {
+                    value1 = program.get(programCounter + 1);
+                }
+
+                if(value1 == 0){
+                    int value2 = 0;
+                    if(getParameterMode(currentValue, 0) == ParameterModes.POSITION_MODE){
+                        value2 = program.get(program.get(programCounter + 2));
+                    } else {
+                        value2 = program.get(programCounter + 2);
+                    }
+                    programCounter = value2;
+                    increaseBy = 0;
+                } else {
+                    increaseBy = 3;
+                }
+            } else if (opcode == 7){
+                //Less Than
+                int param1 = getParameterMode(currentValue, 1) == ParameterModes.POSITION_MODE ? program.get(program.get(programCounter + 1)) : program.get(programCounter + 1);
+                int param2 = getParameterMode(currentValue, 0) == ParameterModes.POSITION_MODE ? program.get(program.get(programCounter + 2)) : program.get(programCounter + 2);
+
+                if(param1 < param2){
+                    int writeToPosition = program.get(programCounter + 3);
+                    program.set(writeToPosition, 1);
+                } else {
+                    int writeToPosition = program.get(programCounter + 3);
+                    program.set(writeToPosition, 0);
+                }
+            } else if (opcode == 8){
+                int param1 = getParameterMode(currentValue, 1) == ParameterModes.POSITION_MODE ? program.get(program.get(programCounter + 1)) : program.get(programCounter + 1);
+                int param2 = getParameterMode(currentValue, 0) == ParameterModes.POSITION_MODE ? program.get(program.get(programCounter + 2)) : program.get(programCounter + 2);
+
+                if(param1 == param2){
+                    int writeToPosition = program.get(programCounter + 3);
+                    program.set(writeToPosition, 1);
+                } else {
+                    int writeToPosition = program.get(programCounter + 3);
+                    program.set(writeToPosition, 0);
                 }
             }
 
@@ -84,6 +148,11 @@ public class IntCodeComputer {
             currentValue = program.get(programCounter);
             opcode = getOpcode(currentValue);
         } while (opcode != 99);
+    }
+
+    public void run(int input){
+        this.input = input;
+        run();
     }
 
     private ParameterModes getParameterMode(int currentValue, int parameterPosition){
