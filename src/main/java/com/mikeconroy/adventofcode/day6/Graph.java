@@ -19,6 +19,31 @@ public class Graph {
         parentNode.add(childNode);
     }
 
+    public int getOrbitalTransfersRequired(String from, String to){
+        Node fromNode = nodes.get(from);
+        Node toNode = nodes.get(to);
+
+        HashMap<Node, Integer> fromParentsAndCountsMap = new HashMap<>();
+        fromNode.getParentsAndCounts(fromParentsAndCountsMap, 0);
+
+        HashMap<Node, Integer> toParentsAndCountsMap = new HashMap<>();
+        toNode.getParentsAndCounts(toParentsAndCountsMap, 0);
+
+        int least = Integer.MAX_VALUE;
+        for(Node key : fromParentsAndCountsMap.keySet()){
+            if(toParentsAndCountsMap.containsKey(key)){
+                int fromCount = fromParentsAndCountsMap.get(key);
+                int toCount = toParentsAndCountsMap.get(key);
+                int sum = fromCount + toCount;
+                if(sum < least){
+                    least = sum;
+                }
+            }
+        }
+
+        return least - 2;
+    }
+
     public int countDirectOrbits(){
         int sum = 0;
         for(String key : nodes.keySet()){
@@ -32,9 +57,7 @@ public class Graph {
         for(String key : nodes.keySet()){ 
             sum += nodes.get(key).getNoOfParentsToRoot();
         }
-
         return sum;
-
     }
 
     private Node getOrCreateNode(String nodeName){
@@ -58,6 +81,16 @@ public class Graph {
                 return 0;
             } else {
                 return 1 + parentNode.getNoOfParentsToRoot();
+            }
+        }
+
+        public int getParentsAndCounts(Map<Node, Integer> parentsAndCountsMap, int count){
+            if(parentNode == null){
+                return 0;
+            } else {
+                count++;
+                parentsAndCountsMap.put(parentNode, count);
+                return 1 + parentNode.getParentsAndCounts(parentsAndCountsMap, count);
             }
         }
 

@@ -14,7 +14,7 @@ public class Day6Solver implements Solver {
         if(part == 1){
             return orbits.countTotalOrbits();
         } else if(part == 2){
-            return 0;
+            return orbits.getOrbitalTransfersRequired("YOU", "SAN");
         }
         return 0;
     }
