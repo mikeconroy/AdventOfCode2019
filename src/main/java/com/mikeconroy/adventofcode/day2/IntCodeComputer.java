@@ -10,11 +10,14 @@ public class IntCodeComputer {
     private int programCounter = 0;
     private int currentValue = 0;
     private int input = 1;
+    private int secondInput = 0;
     private int output = 0;
 
     public void run(){
         currentValue = program.get(programCounter);
         int opcode = getOpcode(currentValue);
+        //Change to array eventually?
+        int inputCounter = 1;
         do {
             int increaseBy = 4;
             int result = 0;
@@ -64,7 +67,12 @@ public class IntCodeComputer {
                 program.set(writeToPosition, result);
             } else if(opcode == 3){
                 //Take input and save to position of parameter.
-                result = input;
+                if(inputCounter == 1){
+                    result = input;
+                } else {
+                    result = secondInput;
+                }
+                inputCounter++;
                 increaseBy = 2;
                 int writeToPosition = program.get(programCounter + 1);
                 program.set(writeToPosition, result);
@@ -154,6 +162,14 @@ public class IntCodeComputer {
         this.input = input;
         run();
     }
+
+   public void setInput(int input){
+       this.input = input;
+   }
+
+   public void setSecondInput(int input){
+       secondInput = input;
+   }
 
     private ParameterModes getParameterMode(int currentValue, int parameterPosition){
         String currentValueString = String.format("%04d", currentValue);
