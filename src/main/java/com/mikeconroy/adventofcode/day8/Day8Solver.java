@@ -9,19 +9,22 @@ public class Day8Solver implements Solver {
 
     private String fileLocation = "inputs/day8";
     private String image;
+    
+    private int imageWidth = 25;
+    private int imageHeight = 6;
 
     public int solve(int part){
         loadInput();
         if(part == 1){
             return calculatePart1();
         } else if(part == 2){
-            return 0;
+            return calculatePart2();
         }
         return 0;
     }
 
     private int calculatePart1(){
-        ArrayList<ArrayList<Integer>> layers = parseLayers(25, 6);
+        ArrayList<ArrayList<Integer>> layers = parseLayers(imageWidth, imageHeight);
         int leastZeroes = Integer.MAX_VALUE;
         int layerNum = -1;
         for(int index = 0; index < layers.size(); index++){
@@ -34,6 +37,36 @@ public class Day8Solver implements Solver {
         int numOfOnes = countDigitInLayer(layers.get(layerNum), 1);
         int numOfTwos = countDigitInLayer(layers.get(layerNum), 2);
         return numOfOnes * numOfTwos;
+    }
+
+    private int calculatePart2(){
+        ArrayList<ArrayList<Integer>> imageLayers = parseLayers(imageWidth, imageHeight);
+        ArrayList<Integer> finalImage = new ArrayList<>();
+
+        for(int pixel = 0; pixel < (imageWidth*imageHeight); pixel++){
+            int currentLayer = 0;
+            int currentPixel = imageLayers.get(currentLayer).get(pixel);
+            while(currentPixel == 2){
+                currentLayer++;
+                currentPixel = imageLayers.get(currentLayer).get(pixel);
+            }
+            finalImage.add(currentPixel);
+        }
+        printImage(finalImage, imageWidth, imageHeight);
+        return 0;
+    }
+
+    private void printImage(ArrayList<Integer> image, int width, int height){
+        for(int row = 0; row < height; row++){
+            for(int col = 0; col < width; col++){
+                if(image.get((row * imageWidth) + col) == 0){
+                    System.out.print(" ");
+                } else if (image.get((row * imageWidth) + col) == 1){
+                    System.out.print("#");
+                }
+            }
+            System.out.println();
+        }
     }
 
     private int countDigitInLayer(ArrayList<Integer> layer, int countDigit){
