@@ -18,9 +18,69 @@ public class Day7Solver implements Solver {
         if(part == 1){
             return calculatePart1();
         } else if(part == 2){
-            return 0;
+            return calculatePart2();
         }
         return 0;
+    }
+
+    private int calculatePart2(){
+        Amplifier ampA = new Amplifier(initialProgram);
+        Amplifier ampB = new Amplifier(initialProgram);
+        Amplifier ampC = new Amplifier(initialProgram);
+        Amplifier ampD = new Amplifier(initialProgram);
+        Amplifier ampE = new Amplifier(initialProgram);
+
+        int max = 0;
+        for(int a = 5; a < 10; a++){
+            for(int b = 5; b < 10; b++){
+                for(int c = 5; c < 10; c++){
+                    for(int d = 5; d < 10; d++){
+                        for(int e = 5; e < 10; e++){
+                            Set<Integer> settingsSet = new HashSet<Integer>();
+                            if(settingsSet.add(a) &&
+                                settingsSet.add(b) &&
+                                settingsSet.add(c) &&
+                                settingsSet.add(d) &&
+                                settingsSet.add(e)){
+                                    ampA.setPhaseSetting(a);
+                                    ampB.setPhaseSetting(b);
+                                    ampC.setPhaseSetting(c);
+                                    ampD.setPhaseSetting(d);
+                                    ampE.setPhaseSetting(e);                                 
+                                    
+                                    ampA.setInputSignal(0);
+                                    ampB.setInputSignal(ampA.getOutputWithoutReload());
+                                    ampC.setInputSignal(ampB.getOutputWithoutReload());
+                                    ampD.setInputSignal(ampC.getOutputWithoutReload());
+                                    ampE.setInputSignal(ampD.getOutputWithoutReload());
+                                    
+                                    int prevOutput = -1;
+                                    while(true){
+                                        int output = ampE.getOutputWithoutReload();
+                                        if(output == prevOutput){
+                                            System.out.println(output);
+                                            if(max < output){
+                                                max = output;
+                                            }
+                                            break;
+                                        }
+                                        prevOutput = output;
+                                        ampA.setInputSignal(output);
+                                        ampB.setInputSignal(ampA.getOutputWithoutReload());
+                                        ampC.setInputSignal(ampB.getOutputWithoutReload());
+                                        ampD.setInputSignal(ampC.getOutputWithoutReload());
+                                        ampE.setInputSignal(ampD.getOutputWithoutReload());
+                                    }
+                                    // if(output > max){
+                                    //     max = output;
+                                    // }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return max;
     }
 
     private int calculatePart1(){
@@ -31,7 +91,6 @@ public class Day7Solver implements Solver {
         Amplifier ampE = new Amplifier(initialProgram);
 
         int max = 0;
-        String maxPhaseSetting = "";
         for(int a = 0; a < 5; a++){
             for(int b = 0; b < 5; b++){
                 for(int c = 0; c < 5; c++){

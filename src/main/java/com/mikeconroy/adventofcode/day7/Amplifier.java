@@ -11,6 +11,7 @@ public class Amplifier {
 
     public Amplifier(List<Integer> program){
         this.program = program;
+        computer.loadProgram(program);
     }
 
     public void setPhaseSetting(int phaseSetting){
@@ -24,6 +25,12 @@ public class Amplifier {
 
     public int getOutput(){
         computer.loadProgram(program);
+        computer.run();
+        program = computer.getProgram();
+        return computer.getOutput();
+    }
+
+    public int getOutputWithoutReload(){
         computer.run();
         return computer.getOutput();
     }

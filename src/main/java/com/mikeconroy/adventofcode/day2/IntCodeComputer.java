@@ -14,6 +14,7 @@ public class IntCodeComputer {
     private int output = 0;
 
     public void run(){
+        programCounter = 0;
         currentValue = program.get(programCounter);
         int opcode = getOpcode(currentValue);
         //Change to array eventually?
