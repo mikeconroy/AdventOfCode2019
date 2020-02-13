@@ -7,6 +7,7 @@ import com.mikeconroy.adventofcode.day4.Day4Solver;
 import com.mikeconroy.adventofcode.day5.Day5Solver;
 import com.mikeconroy.adventofcode.day6.Day6Solver;
 import com.mikeconroy.adventofcode.day7.Day7Solver;
+import com.mikeconroy.adventofcode.day8.Day8Solver;
 
 public class App
 {
@@ -32,5 +33,7 @@ public class App
         System.out.println("Day 6B: " + solver.solve(2));
         solver = new Day7Solver();
         System.out.println("Day 7: " + solver.solve(1));
+        solver = new Day8Solver();
+        System.out.println("Day 8: " + solver.solve(1));
     }
 }
